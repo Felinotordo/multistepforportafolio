@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useStepContext } from "../context/stepcontext";
 import PersonalInfo from "./steps/PersonalInfo";
 import OurPlan from "./steps/OurPlan";
@@ -7,12 +7,41 @@ import Thanks from "./steps/Thanks";
 import Final from "./steps/Final";
 
 const Sidebar = ({ children }) => {
-  const { step, setStep } = useStepContext();
+  const { step, setStep, formData, setFormData } = useStepContext();
+  const [formValidation, setFormValidation] = useState(true);
+  const [errors, setErrors] = useState({
+    name: false,
+    email: false,
+    phone: false,
+  });
+
+  const validation = () => {
+    setFormValidation(
+      formData.name === "" || formData.email === "" || formData.phone === ""
+    );
+  };
+
+  React.useEffect(() => {
+    validation();
+  });
 
   const nextStep = () => {
+    setErrors({
+      name: formData.name === "",
+      email: formData.email === "",
+      phone: formData.phone === "",
+    });
     if (step === 5) {
       setStep(1);
-    } else {
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+      });
+    } else if (step === 1 && !formValidation) {
+      setStep(step + 1);
+      setFormValidation(true);
+    } else if (step !== 1) {
       setStep(step + 1);
     }
   };
@@ -24,19 +53,25 @@ const Sidebar = ({ children }) => {
   let content;
   switch (step) {
     case 1:
-      content = <PersonalInfo />;
+      content = (
+        <PersonalInfo
+          errorName={errors.name}
+          errorEmail={errors.email}
+          errorPhone={errors.phone}
+        />
+      );
       break;
     case 2:
       content = <OurPlan />;
       break;
     case 3:
-      content = <Accessories/>;
+      content = <Accessories />;
       break;
     case 4:
-      content = <Final/>;
+      content = <Final />;
       break;
     case 5:
-      content = <Thanks/>;
+      content = <Thanks />;
       break;
 
     default:
@@ -85,7 +120,7 @@ const Sidebar = ({ children }) => {
           onClick={() => {
             backStep();
           }}
-          className={`text-[#9b9ba3] ${step === 1 ? "hidden" : ""} ${
+          className={`text-[#9e9ea5] font-ubuntu font-medium ${step === 1 ? "hidden" : ""} ${
             step === 5 ? "hidden" : ""
           }`}
         >

@@ -1,35 +1,34 @@
-import React, { useState } from "react";
+import React from "react";
 import { useStepContext } from "../../context/stepcontext";
 
 const OurPlan = () => {
-  const {isAnnual, setIsAnnual} = useStepContext()
-  const [planSelect, setPlanSelect] = useState(null);
+  const {isAnnual, setIsAnnual,planSelect, setPlanSelect} = useStepContext()
   const infoPlans = [
     {
       id: 1,
       name: "Arcade",
-      monthPrice: "$9/mo",
-      yearPrice: "$90/yr",
+      monthPrice: 9,
+      yearPrice: 90,
       urlSvg: "/icon-arcade.svg",
     },
     {
       id: 2,
       name: "Advanced",
-      monthPrice: "$12/mo",
-      yearPrice: "$120/yr",
+      monthPrice: 12,
+      yearPrice: 120,
       urlSvg: "/icon-advanced.svg",
     },
     {
       id: 3,
       name: "Pro",
-      monthPrice: "$15/mo",
-      yearPrice: "$150/yr",
+      monthPrice: 15,
+      yearPrice: 150,
       urlSvg: "/icon-pro.svg",
     },
   ];
 
-  const selectPlan = (name) => {
-    setPlanSelect(name);
+  const selectPlan = (plan) => {
+    setPlanSelect(plan);
   };
 
   return (
@@ -40,12 +39,12 @@ const OurPlan = () => {
       <p className="text-[#9b9ba3] text-[15px] font-ubuntu font-medium mt-[5px]">
         You have the option of monthly or yearly billing{" "}
       </p>
-      {infoPlans.map(({ id, name, monthPrice, yearPrice, urlSvg }) => (
+      {infoPlans.map((plan) => (
         <div
-          key={id}
-          onClick={() => selectPlan(name)}
+          key={plan.id}
+          onClick={() => selectPlan(plan)}
           className={`w-[300px] min-h-[70px] border-[1px] mt-[10px] rounded-[10px] flex flex-col justify-center items-center ${
-            planSelect === name
+            planSelect.name === plan.name
               ? "bg-[#f8f9fe] border-[#534c9a]"
               : "bg-white border-gray-300"
           }`}
@@ -54,16 +53,16 @@ const OurPlan = () => {
             className={`flex flex-row w-full ${isAnnual ? "mt-[15px]" : ""}`}
           >
             <img
-              src={urlSvg}
+              src={plan.urlSvg}
               alt="plan do not exist"
               className="size-[40px] ml-[10px]"
             />
             <div className="flex flex-col ml-[15px]">
               <h2 className="text-[#06264f] text-[15px] font-ubuntu font-medium">
-                {name}
+                {plan.name}
               </h2>
-              <p className="text-[#aeafb3] text-[11px] font-ubuntu">
-                {isAnnual ? yearPrice : monthPrice}
+              <p className="text-[#aeafb3] text-[14px] font-ubuntu">
+                {isAnnual ? `$${plan.yearPrice}/yr` : `$${plan.monthPrice}/mo`}
               </p>
             </div>
           </div>
